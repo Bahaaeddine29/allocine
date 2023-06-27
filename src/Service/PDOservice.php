@@ -26,10 +26,18 @@ class PDOservice
           
     }
 
+    // public function findAll()
+    // {
+    //     $query = $this-> pdo-> query('SELECT * FROM movie'); 
+    //     return $query-> fetchObject(movie::class); 
+    // }
+
     public function findAll()
     {
-        $query = $this-> pdo-> query('SELECT * FROM movie') ; 
-        return $query-> fetchObject(movie::class); 
+        $query = $this-> pdo-> query('SELECT * FROM movie'); 
+        return $query-> fetchAll (PDO::FETCH_CLASS, movie::class); 
     }
+
+
 }
 
