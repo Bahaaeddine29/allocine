@@ -2,7 +2,9 @@
 
 namespace App\Service; 
 
-use PDO; 
+use PDO;
+
+use App\Models\Movie; 
 
 class PDOservice 
 {
@@ -24,5 +26,10 @@ class PDOservice
           
     }
 
+    public function findAll()
+    {
+        $query = $this-> pdo-> query('SELECT * FROM movie') ; 
+        return $query-> fetchObject(movie::class); 
+    }
 }
 

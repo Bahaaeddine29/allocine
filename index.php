@@ -9,3 +9,5 @@ $pdo = new PdoService;
 dump($pdo->findAllMovie()); 
 
 dump(new PDOservice()); 
+
+dump($pdo->findAll()); 
