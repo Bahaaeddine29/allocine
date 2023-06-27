@@ -10,34 +10,37 @@ class PDOservice
 {
     protected PDO $pdo;
 
+    private string $dsn = 'mysql:host=127.0.0.1:3306;dbname=allocine';
+    private string $user = 'root';
+    private string $pwd = ''; 
+
     public function __construct ()
     {
         $this->pdo = new PDO($this->dsn, $this->user, $this->pwd);
     }
 
-    private string $dsn = 'mysql:host=127.0.0.1:3306;dbname=allocine';
-    private string $user = 'root';
-    private string $pwd = ''; 
+
+            public function getPdo(): PDO
+            {
+                return $this->pdo;
+            }
 
 
-    public function findAllMovie(): array
-    {
-        return $this->pdo->query('SELECT * FROM movie')->fetchAll();
-          
-    }
+        public function getDsn():string
+        {
+            return $this->dsn;
+        }
+        
+        public function getUser():string
+        {
+            return $this->user;
+        }
 
-    // public function findAll()
-    // {
-    //     $query = $this-> pdo-> query('SELECT * FROM movie'); 
-    //     return $query-> fetchObject(movie::class); 
-    // }
-
-    public function findAll()
-    {
-        $query = $this-> pdo-> query('SELECT * FROM movie'); 
-        return $query-> fetchAll (PDO::FETCH_CLASS, movie::class); 
-    }
-
+        public function getPwd():string
+        {
+            return $this->pwd;
+        }
+            
 
 }
 

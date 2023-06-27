@@ -2,12 +2,18 @@
 
 include_once __DIR__ . '/vendor/autoload.php'; 
 
-use App\Service\PDOservice; 
+// use App\Repository\MovieRepo; 
 
-$pdo = new PdoService; 
+use App\Service\PDOservice; 
+use App\Repository\MovieRepo; 
+
+
+$pdo = new MovieRepo(); 
 
 dump($pdo->findAllMovie()); 
 
-dump(new PDOservice()); 
+dump($pdo->findOneMovie()); 
 
-dump($pdo->findAll()); 
+dump($pdo->findMovie());
+
+dump($pdo->findById(5));
