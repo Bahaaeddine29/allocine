@@ -63,7 +63,18 @@ class MovieRepo
         return $query->FetchAll(PDO::FETCH_CLASS, movie::class);
     }
 
-
+    public function addMovie(Movie $movie):movie 
+    {
+        $query = $this->pdoService->getPDO()->prepare('INSERT INTO movie VALUE (null, :title, :release_date)');
+        $title = $movie->getTitle();
+        $date = $movie->getReleaseDate();
+        $releaseDate = $date->format('Y-m-d');
+        $query->bindParam(':title', $title);
+        $query->bindParam(':release_date', $releaseDate);
+        $query->execute();
+        
+        return $movie;
+    }
 
 }
 
