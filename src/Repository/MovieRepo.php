@@ -46,13 +46,24 @@ class MovieRepo
     return $this->pdoService->getPdo()->query($this->queryAll)->fetchAll(PDO::FETCH_CLASS, movie::class);
   } 
 
-    public function findById(int $id):Movie
+    public function findById(int $id):Movie | bool
   {
     $query = $this->pdoService->getPdo()->prepare('SELECT * FROM movie WHERE id= ?');
     $query->bindValue(1, $id);
     $query->execute();
     return $query->fetchObject(Movie::class);
   }
+
+  public function findByName (string $title)
+    {
+        $query = $this->pdoService->getPdo()->prepare("SELECT*FROM movie WHERE title LIKE :title");
+        $like = '%' . $title . '%';
+        $query-> bindParam(':title', $like);
+        $query-> execute();
+        return $query->FetchAll(PDO::FETCH_CLASS, movie::class);
+    }
+
+
 
 }
 

@@ -10,10 +10,11 @@ use App\Repository\MovieRepo;
 
 $pdo = new MovieRepo(); 
 
-dump($pdo->findAllMovie()); 
+// dump($pdo->findAllMovie()); 
 
-dump($pdo->findOneMovie()); 
+// dump($pdo->findOneMovie()); 
 
-dump($pdo->findMovie());
+// dump($pdo->findMovie());
 
-dump($pdo->findById(5));
+dump($pdo->findById(10));
+dump($pdo->findByName("h")); 
