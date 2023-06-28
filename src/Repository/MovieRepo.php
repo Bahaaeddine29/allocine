@@ -3,6 +3,7 @@
 namespace App\Repository; 
 
 use App\Models\Movie;
+use App\Models\Actor; 
 use App\Service\PDOService;
 use PDO;
 
@@ -74,6 +75,18 @@ class MovieRepo
         $query->execute();
         
         return $movie;
+    }
+
+    public function addActor(Actor $actor)
+    {
+        $query = $this->pdoService->getPDO()->prepare('INSERT INTO actor VALUE (null, :first_name, :last_name)');
+        $firstName = $actor->getFirstName();
+        $lastName = $actor->getLastName();
+        $query->bindParam(':first_name', $firstName);
+        $query->bindParam(':last_name', $lastName);
+        $query->execute();
+        
+        return $actor;
     }
 
 }
