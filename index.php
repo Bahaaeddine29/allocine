@@ -8,29 +8,28 @@ use App\Service\PDOservice;
 use App\Repository\MovieRepo; 
 use App\Models\Movie; 
 use App\Models\Actor; 
+use App\Repository\ActorRepo;
 
 
-$pdo = new MovieRepo(); 
-
-// dump($pdo->findAllMovie()); 
-
-// dump($pdo->findOneMovie()); 
-
-// dump($pdo->findMovie());
-
-dump($pdo->findById(10));
-
-dump($pdo->findByName("h")); 
+$movieRepo = new MovieRepo();
+$actorRepo = new ActorRepo();
 
 
-$movie = new Movie;
-$movie->setTitle('Shrek 3');
-$movie->setReleaseDate(new DateTime ('2003-1-23'));
+// $movie = $movieRepo->findById(13);
 
-dump($pdo->addMovie($movie)); 
+$actor1 = $actorRepo->findById(8);
+$actor2 = $actorRepo->findById(9);
+$actor3 = $actorRepo->findById(2);
 
-$actor = new Actor;
-$actor-> setFirstName('Omar'); 
-$actor->setLastName('Sy'); 
+$movie->addActor($actor1);
+$movie->addActor($actor2);
+$movie->addActor($actor3);
 
-dump($pdo->addActor($actor)); 
+$movieRepo->addActorsToMovie($movie);
+
+dump ($actor1); 
+dump ($actor2);
+
+$actorId = 11; 
+$actor11 = new Actor($actorId);
+$actorRepo->deleteActor($actor11);

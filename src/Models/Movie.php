@@ -2,38 +2,63 @@
 
 namespace App\Models;
 
+use DateTime;
 
-class Movie 
+class Movie
 {
-    private $title; 
-    private $id;
-    private $release_date; 
+    private int $id;
 
-    public function getTitle()
-    {
-        return $this->title;
-    }
+    private string $title;
 
-    public function setTitle($title)
-    {
-        $this->title = $title;
-    }
+    private DateTime $releaseDate;
 
-    public function getReleaseDate()
-    {
-        return $this->release_date;
-    }
+    private array $actors = [];
 
-    public function setReleaseDate($release)
-    {
-        $this->release_date = $release;
-    }
-
-    public function getId ()
+    public function getId(): int
     {
         return $this->id;
     }
 
+    public function getTitle(): string
+    {
+        return $this->title;
+    }
 
+    public function setTitle(string $title): void
+    {
+        $this->title = $title;
+    }
+
+    public function getReleaseDate(): DateTime
+    {
+        return $this->releaseDate;
+    }
+
+    public function setReleaseDate(DateTime $releaseDate): void
+    {
+        $this->releaseDate = $releaseDate;
+    }
+
+    public function getActors(): array
+    {
+        return $this->actors;
+    }
+
+    public function setActors(array $actors): void
+    {
+        $this->actors = $actors;
+    }
+
+    public function addActor(Actor $actor): void
+    {
+        $this->actors[] = $actor;
+    }
+
+    public function removeActor(Actor $actor): void
+    {
+        if(($key = array_search($actor, $this->actors)) !== false){
+            unset($this->actors[$key]);
+        }
+    }
 }
 

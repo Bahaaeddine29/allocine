@@ -1,94 +1,97 @@
-<?php 
+<?php
 
-namespace App\Repository; 
+namespace App\Repository;
 
+use App\Models\Actor;
 use App\Models\Movie;
-use App\Models\Actor; 
 use App\Service\PDOService;
 use PDO;
 
-/**
- * Summary of MovieRepository
- */
 class MovieRepo
 {
-  private PDOService $pdoService;
-  private string $queryAll = 'SELECT * FROM movie';
-  
-  public function __construct()
-  {
-    $this->pdoService = new PDOService();
-  }
+    private PDOService $PDOService;
+    private string $queryAll = 'SELECT * FROM movie';
 
-  /**
-   * Summary of findAllMovie
-   * @return array
-   */
-  public function findAllMovie():array
-  {
-    return $this->pdoService->getPdo()->query($this->queryAll)->fetchAll();
-  }
-
-  /**
-   * Summary of findOneMovie
-   * @return \App\Models\Movie
-   */
-  public function findOneMovie():Movie
-  {
-    return $this->pdoService->getPdo()->query($this->queryAll)->fetchObject(movie::class);
-  } 
-
-  /**
-   * Summary of findMovie
-   * @return array
-   */
-  public function findMovie():array
-  {
-    return $this->pdoService->getPdo()->query($this->queryAll)->fetchAll(PDO::FETCH_CLASS, movie::class);
-  } 
-
-    public function findById(int $id):Movie | bool
-  {
-    $query = $this->pdoService->getPdo()->prepare('SELECT * FROM movie WHERE id= ?');
-    $query->bindValue(1, $id);
-    $query->execute();
-    return $query->fetchObject(Movie::class);
-  }
-
-  public function findByName (string $title)
+    public function __construct()
     {
-        $query = $this->pdoService->getPdo()->prepare("SELECT*FROM movie WHERE title LIKE :title");
-        $like = '%' . $title . '%';
-        $query-> bindParam(':title', $like);
-        $query-> execute();
-        return $query->FetchAll(PDO::FETCH_CLASS, movie::class);
+        $this->PDOService = new PDOService();
     }
 
-    public function addMovie(Movie $movie):movie 
+
+    public function findAll():array
     {
-        $query = $this->pdoService->getPDO()->prepare('INSERT INTO movie VALUE (null, :title, :release_date)');
-        $title = $movie->getTitle();
-        $date = $movie->getReleaseDate();
-        $releaseDate = $date->format('Y-m-d');
-        $query->bindParam(':title', $title);
-        $query->bindParam(':release_date', $releaseDate);
+        return $this->PDOService->getPDO()->query($this->queryAll)->fetchAll();
+    }
+
+    public function findFirstMovieToModel():Movie
+    {
+        return $this->PDOService->getPDO()->query($this->queryAll)->fetchObject(Movie::class);
+    }
+
+    public function findAllMoviesToModel():array
+    {
+        return $this->PDOService->getPDO()->query($this->queryAll)->fetchAll(PDO::FETCH_CLASS, Movie::class);
+    }
+
+    public function findById(int $id):Movie|bool
+    {
+        $query = $this->PDOService->getPDO()->prepare('SELECT * FROM movie WHERE id = ?');
+        $query->bindValue(1,$id);
         $query->execute();
-        
+
+        return $query->fetchObject(Movie::class);
+    }
+
+    public function findByTitle(string $title):array
+    {
+        $query = $this->PDOService->getPDO()->prepare('SELECT * FROM movie WHERE title LIKE :title');
+        $title = '%'.$title.'%';
+        $query->bindParam(':title',$title);
+        $query->execute();
+
+        return $query->fetchAll(PDO::FETCH_CLASS,Movie::class);
+    }
+
+    public function insertMovie(Movie $movie): Movie
+    {
+        $query = $this->PDOService->getPDO()->prepare('INSERT INTO movie VALUE (null, :title, :release_date)');
+        $title = $movie->getTitle();
+        $releaseDate = $movie->getReleaseDate()->format('Y-m-d');
+        $query->bindParam(':title',$title);
+        $query->bindParam(':release_date',$releaseDate);
+        $query->execute();
+
         return $movie;
     }
 
-    public function addActor(Actor $actor)
+    public function addActorsToMovie(Movie $movie): Movie
     {
-        $query = $this->pdoService->getPDO()->prepare('INSERT INTO actor VALUE (null, :first_name, :last_name)');
-        $firstName = $actor->getFirstName();
-        $lastName = $actor->getLastName();
-        $query->bindParam(':first_name', $firstName);
-        $query->bindParam(':last_name', $lastName);
-        $query->execute();
-        
-        return $actor;
+        $actors = $movie->getActors();
+        foreach ($actors as $actor) {
+            $query = $this->PDOService->getPDO()->prepare('INSERT INTO movie_actor VALUES (null,:id_actor,:id_movie)');
+
+            $idMovie = $movie->getId();
+
+            /** @var Actor $actor */
+            $idActor = $actor->getId();
+
+            $query->bindParam(':id_movie', $idMovie);
+            $query->bindParam(':id_actor', $idActor);
+
+            $query->execute();
+        }
+        return $movie;
     }
 
+    public function deleteMovie(Movie $movie): Movie
+    {
+        $query = $this->PDOService->getPDO()->prepare('DELETE FROM movie WHERE id = :id');
+        $id = $movie->getId();
+        $query->bindParam(':id', $id);
+        $query->execute();
+
+        return $movie;
+    }
+
+
 }
-
-
